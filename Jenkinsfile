@@ -46,25 +46,12 @@ pipeline {
             }
         }
 
-        stage('Generate Report') {
+         stage('Generate Report') {
+    steps {
+        bat '''
+        if exist reports rmdir /s /q reports
 
-            steps {
-
-                bat """
-                C:\\Users\\HP\\OneDrive\\Desktop\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat -g results\\result.jtl ^
-                -o reports
-                """
-            }
-        }
-
-        stage('Archive Results') {
-
-            steps {
-
-                archiveArtifacts artifacts: 'results/*.jtl'
-
-                archiveArtifacts artifacts: 'reports/**/*'
-            }
-        }
+        C:\\Users\\HP\\OneDrive\\Desktop\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat -g results\\result.jtl -o reports
+        '''
     }
 }
