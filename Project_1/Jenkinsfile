@@ -8,10 +8,10 @@ pipeline {
 
                 bat """
                 C:\\Users\\HP\\OneDrive\\Desktop\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat -n ^
-                -t jmx\\UserService.jmx ^
-                -l results\\results.jtl ^
+                -t Project_1\\jmx\\UserService.jmx ^
+                -l Project_1\\results\\results.jtl ^
                 -e ^
-                -o reports
+                -o Project_1\\reports
                 """
             }
         }
