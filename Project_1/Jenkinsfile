@@ -1,27 +1,61 @@
-stages {
+pipeline {
 
-    stage('Clean Reports') {
-        steps {
-            bat '''
-            if exist Project_1\\reports rmdir /s /q Project_1\\reports
-            if exist Project_1\\results\\results.jtl del /f /q Project_1\\results\\results.jtl
-            '''
-        }
+    agent any
+
+    parameters {
+
+        choice(
+            name: 'ENV',
+            choices: ['DEV','QA','STAGE'],
+            description: 'Select Environment'
+        )
+
+        string(
+            name: 'THREADS',
+            defaultValue: '5',
+            description: 'Virtual Users'
+        )
+
+        string(
+            name: 'RAMPUP',
+            defaultValue: '5',
+            description: 'Ramp Up'
+        )
+
+        string(
+            name: 'LOOPS',
+            defaultValue: '2',
+            description: 'Loop Count'
+        )
     }
 
-    stage('Run JMeter') {
-        steps {
-            bat """
-            C:\\Users\\HP\\OneDrive\\Desktop\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat -n ^
-            -t Project_1\\jmx\\UserService.jmx ^
-            -Jthreads=%THREADS% ^
-            -Jrampup=%RAMPUP% ^
-            -Jloops=%LOOPS% ^
-            -Jenv=%ENV% ^
-            -l Project_1\\results\\results.jtl ^
-            -e ^
-            -o Project_1\\reports
-            """
+    stages {
+
+        stage('Clean Reports') {
+            steps {
+                bat '''
+                if exist Project_1\\reports rmdir /s /q Project_1\\reports
+                if exist Project_1\\results\\results.jtl del /f /q Project_1\\results\\results.jtl
+                '''
+            }
+        }
+
+        stage('Run JMeter') {
+            steps {
+
+                bat """
+                C:\\Users\\HP\\OneDrive\\Desktop\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat -n ^
+                -t Project_1\\jmx\\UserService.jmx ^
+                -Jthreads=%THREADS% ^
+                -Jrampup=%RAMPUP% ^
+                -Jloops=%LOOPS% ^
+                -Jenv=%ENV% ^
+                -l Project_1\\results\\results.jtl ^
+                -e ^
+                -o Project_1\\reports
+                """
+
+            }
         }
     }
 }
